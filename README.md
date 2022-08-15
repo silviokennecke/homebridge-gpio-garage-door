@@ -4,9 +4,8 @@
 
 </p>
 
-[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
-[![npm](https://badgen.net/npm/v/homebridge-gpio-garage-door/latest?icon=npm&label)](https://www.npmjs.com/package/homebridge-gpio-garage-door)
-[![npm](https://badgen.net/npm/dt/homebridge-gpio-garage-door?label=downloads)](https://www.npmjs.com/package/homebridge-gpio-garage-door)
+[![npm](https://badgen.net/npm/v/@silviokennecke/homebridge-gpio-garage-door/latest?icon=npm&label)](https://www.npmjs.com/package/@silviokennecke/homebridge-gpio-garage-door)
+[![npm](https://badgen.net/npm/dt/@silviokennecke/homebridge-gpio-garage-door?label=downloads)](https://www.npmjs.com/package/@silviokennecke/homebridge-gpio-garage-door)
 [![release](https://badgen.net/github/release/silviokennecke/homebridge-gpio-garage-door)](https://github.com/silviokennecke/homebridge-gpio-garage-door/releases)
 [![license](https://badgen.net/github/license/silviokennecke/homebridge-gpio-garage-door)](https://github.com/silviokennecke/homebridge-gpio-garage-door/blob/main/LICENSE)
 [![lint & build](https://github.com/silviokennecke/homebridge-gpio-garage-door/actions/workflows/build.yml/badge.svg)](https://github.com/silviokennecke/homebridge-gpio-garage-door/actions/workflows/build.yml)
