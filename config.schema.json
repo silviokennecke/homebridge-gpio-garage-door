@@ -33,6 +33,12 @@
         "required": true,
         "default": 500
       },
+      "executionTime": {
+        "title": "Execution time",
+        "description": "How many seconds does the garage door to execute an open or close command?",
+        "type": "number",
+        "default": 10
+      },
       "reverseOutput": {
         "title": "Negate input",
         "description": "If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.",

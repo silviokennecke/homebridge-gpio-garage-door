@@ -106,25 +106,30 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   }
 
   protected getCurrentDoorState() {
+    this.log.debug('getCurrentDoorState:', this.currentDoorState);
     return this.currentDoorState;
   }
 
   protected getTargetDoorState() {
+    this.log.debug('getTargetDoorState:', this.targetDoorState);
     return this.targetDoorState;
   }
 
   protected setTargetDoorState(targetState) {
+    this.log.debug('setTargetDoorState:', targetState);
     this.targetDoorState = targetState;
 
     let targetGpioPin = -1;
     switch (this.targetDoorState) {
       case this.api.hap.Characteristic.TargetDoorState.OPEN:
+        this.log.debug('Opening garage door');
         this.currentDoorState = this.api.hap.Characteristic.CurrentDoorState.OPENING;
         this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
         targetGpioPin = this.config.gpioPinOpen;
         break;
 
       case this.api.hap.Characteristic.TargetDoorState.CLOSED:
+        this.log.debug('Closing garage door');
         this.currentDoorState = this.api.hap.Characteristic.CurrentDoorState.CLOSING;
         this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
         targetGpioPin = this.config.gpioPinClose;
@@ -134,23 +139,33 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     this.persistCache();
 
     if (targetGpioPin > -1) {
-      GPIO.write(targetGpioPin, this.pinHigh);
-      setTimeout(() => {
-        GPIO.write(targetGpioPin, !this.pinHigh);
+      this.setGpio(targetGpioPin, this.pinHigh);
 
+      setTimeout(() => {
+        this.setGpio(targetGpioPin, !this.pinHigh);
+      }, this.config.emitTime);
+
+      setTimeout(() => {
         this.currentDoorState = this.targetDoorState;
         this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
 
         this.persistCache();
-      }, this.config.emitTime);
+      }, this.config.executionTime * 1000);
     }
   }
 
   protected getObstructionDetected() {
+    this.log.debug('getObstructionDetected:', this.obstructionDetected);
     return this.obstructionDetected;
   }
 
+  private setGpio(pin: number, state: boolean): void {
+    this.log.debug('Setting GPIO pin ' + pin + ' to ' + (state ? 'HIGH' : 'LOW'));
+    GPIO.write(pin, state);
+  }
+
   private persistCache(): void {
+    this.log.debug('Persisting accessory state');
     this.storage.setItemSync(this.currentDoorStateKey, this.currentDoorState);
     this.storage.setItemSync(this.targetDoorState, this.targetDoorState);
   }
