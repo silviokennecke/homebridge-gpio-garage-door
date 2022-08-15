@@ -1,0 +1,44 @@
+{
+  "pluginAlias": "GpioGarageDoor",
+  "pluginType": "accessory",
+  "singular": false,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "placeholder": "Garage door",
+        "default": "Garage door"
+      },
+      "gpioPinOpen": {
+        "title": "GPIO pin for open signal",
+        "description": "The GPIO pin the plugin should use to open the garage door.",
+        "type": "integer",
+        "required": true,
+        "placeholder": "e.g. 7 for GPIO 4"
+      },
+      "gpioPinClose": {
+        "title": "GPIO pin for close signal",
+        "description": "The GPIO pin the plugin should use to close the garage door. This can be the same as the pin for opening.",
+        "type": "integer",
+        "required": true,
+        "placeholder": "e.g. 7 for GPIO 4"
+      },
+      "emitTime": {
+        "title": "Emit time",
+        "description": "How many milliseconds should the GPIO output be HIGH?",
+        "type": "number",
+        "required": true,
+        "default": 500
+      },
+      "reverseOutput": {
+        "title": "Negate input",
+        "description": "If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  }
+}
