@@ -61,16 +61,16 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
     this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.ObstructionDetected, this.obstructionDetected);
 
-    // setup events
-    this.setupEvents();
-
     // setup gpio
-    this.setupGpio();
+    this.setupGpio().then(() => {
+      // setup events
+      this.setupEvents();
 
-    // execute last command
-    if (this.currentDoorState !== this.targetDoorState) {
-      this.setTargetDoorState(this.targetDoorState);
-    }
+      // execute last command
+      if (this.currentDoorState !== this.targetDoorState) {
+        this.setTargetDoorState(this.targetDoorState);
+      }
+    });
   }
 
   getServices() {
@@ -80,11 +80,11 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     ];
   }
 
-  setupGpio(): void {
+  async setupGpio(): Promise<void> {
     this.pinHigh = !this.config.reverseOutput;
 
-    GPIO.setup(this.config.gpioPinOpen, GPIO.DIR_OUT, GPIO.EDGE_BOTH);
-    GPIO.setup(this.config.gpioPinClose, GPIO.DIR_OUT, GPIO.EDGE_BOTH);
+    await GPIO.promise.setup(this.config.gpioPinOpen, GPIO.DIR_OUT, GPIO.EDGE_BOTH);
+    await GPIO.promise.setup(this.config.gpioPinClose, GPIO.DIR_OUT, GPIO.EDGE_BOTH);
 
     GPIO.write(this.config.gpioPinOpen, !this.pinHigh);
     GPIO.write(this.config.gpioPinClose, !this.pinHigh);
@@ -167,6 +167,6 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   private persistCache(): void {
     this.log.debug('Persisting accessory state');
     this.storage.setItemSync(this.currentDoorStateKey, this.currentDoorState);
-    this.storage.setItemSync(this.targetDoorState, this.targetDoorState);
+    this.storage.setItemSync(this.targetDoorStateKey, this.targetDoorState);
   }
 }

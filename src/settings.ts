@@ -6,4 +6,4 @@ export const ACCESSORY_NAME = 'GpioGarageDoor';
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-gpio-garage-door';
+export const PLUGIN_NAME = '@silviokennecke/homebridge-gpio-garage-door';
