@@ -19,13 +19,14 @@ This plugin uses the GPIO output of the Raspberry PI to provide a HomeKit garage
 
 ## Configuration
 
-| key               | type | description                                                                                                                                                                                                                                                        |
-|-------------------|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name              | string | The name of the accessory.                                                                                                                                                                                                                                         | 
-| gpioPinOpen       | integer | The GPIO pin the plugin should use to open the garage door.                                                                                                                                                                                                          | 
-| gpioPinClose      | integer | The GPIO pin the plugin should use to close the garage door. If empty, gpioPinOpen is used to open and close the garage door.                                                                                                                                         | 
-| emitTime          | integer | How many milliseconds should the GPIO output be HIGH?                                                                                                                                                                                                              | 
-| reverseOutput    | boolean | If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.                                                                                                                                                            |
+| key           | type    | description                                                                                                                   |
+|---------------|---------|-------------------------------------------------------------------------------------------------------------------------------|
+| name          | string  | The name of the accessory.                                                                                                    | 
+| gpioPinOpen   | integer | The GPIO pin the plugin should use to open the garage door.                                                                   | 
+| gpioPinClose  | integer | The GPIO pin the plugin should use to close the garage door. If empty, gpioPinOpen is used to open and close the garage door. | 
+| emitTime      | integer | How many milliseconds should the GPIO output be HIGH?                                                                         | 
+| executionTime | integer | How many seconds does the garage door to execute an open or close command?                                                    | 
+| reverseOutput | boolean | If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.                       |
 
 ## Support & Contribution
 
