@@ -52,8 +52,11 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     this.garageDoorService.getCharacteristic(this.api.hap.Characteristic.ObstructionDetected);
 
     // restore persisted settings
-    this.currentDoorState = this.storage.getItemSync(this.currentDoorStateKey) || this.storage.getItemSync(this.targetDoorStateKey) || this.currentDoorState;
-    this.targetDoorState = this.storage.getItemSync(this.targetDoorStateKey) || this.targetDoorState;
+    this.currentDoorState = this.storage.getItemSync(this.currentDoorStateKey)
+      || this.storage.getItemSync(this.targetDoorStateKey)
+      || this.currentDoorState;
+    this.targetDoorState = this.storage.getItemSync(this.targetDoorStateKey)
+      || this.targetDoorState;
     this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
     this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
     this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.ObstructionDetected, this.obstructionDetected);
