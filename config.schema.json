@@ -39,8 +39,14 @@
         "type": "number",
         "default": 10
       },
+      "allowCommandOverride": {
+        "title": "Allow command override",
+        "description": "Define if sending a new command while the garage door is still executing the previous command should be allowed.",
+        "type": "boolean",
+        "default": false
+      },
       "reverseOutput": {
-        "title": "Negate input",
+        "title": "Negate output",
         "description": "If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.",
         "type": "boolean",
         "default": false

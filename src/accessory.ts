@@ -118,6 +118,12 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   }
 
   protected setTargetDoorState(targetState) {
+    if (!this.config.allowCommandOverride && this.isMoving()) {
+      this.log.info('Command ignored, door is currently moving');
+      this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
+      return;
+    }
+
     this.log.debug('setTargetDoorState:', targetState);
     this.targetDoorState = targetState;
 
@@ -159,6 +165,10 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   protected getObstructionDetected() {
     this.log.debug('getObstructionDetected:', this.obstructionDetected);
     return this.obstructionDetected;
+  }
+
+  private isMoving() {
+    return this.currentDoorState !== this.targetDoorState;
   }
 
   private setGpio(pin: number, state: boolean): void {
