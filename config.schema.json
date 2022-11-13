@@ -51,6 +51,24 @@
         "type": "boolean",
         "default": false
       },
+      "gpioStateInputEnabled": {
+        "title": "Enable GPIO state input",
+        "description": "If enabled, the plugin will read the state of the garage door from a GPIO pin.",
+        "type": "boolean",
+        "default": false
+      },
+      "gpioPinState": {
+        "title": "GPIO pin for state input",
+        "description": "The GPIO pin the plugin should use to read the state of the garage door. A HIGH signal will indicate an OPEN garage door.",
+        "type": "integer",
+        "placeholder": "e.g. 7 for GPIO 4"
+      },
+      "gpioStateInputReverse": {
+        "title": "Reverse GPIO state input",
+        "description": "If enabled, a GPIO HIGH state will indicate a CLOSED garage door.",
+        "type": "boolean",
+        "default": false
+      },
       "webhookEnabled": {
         "title": "Enable webhook",
         "description": "If enabled, the plugin will expose a webhook to open or close the garage door.",

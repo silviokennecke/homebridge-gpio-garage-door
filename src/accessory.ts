@@ -113,19 +113,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
               const doorOpen = this.config.webhookJsonValueReverse ? !currentDoorState : !!currentDoorState;
               const hkDoorState = doorOpen ? this.api.hap.Characteristic.CurrentDoorState.OPEN : this.api.hap.Characteristic.CurrentDoorState.CLOSED;
 
-              // update current and target door state
-              this.currentDoorState = hkDoorState;
-              this.targetDoorState = hkDoorState;
-
-              this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
-              this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
-
-              this.persistCache();
-
-              // cancel timeout
-              if (this.garageDoorMovingTimeout) {
-                clearTimeout(this.garageDoorMovingTimeout);
-              }
+              this.externalStateChange(hkDoorState);
             });
 
             statusCode = 200;
@@ -161,6 +149,11 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
       await GPIO.promise.setup(this.config.gpioPinClose, GPIO.DIR_OUT, GPIO.EDGE_BOTH);
       GPIO.write(this.config.gpioPinClose, !this.pinHigh);
     }
+
+    if (this.config.gpioStateInputEnabled) {
+      GPIO.on('change', this.gpioInputStateChange.bind(this));
+      await GPIO.promise.setup(this.config.gpioPinState, GPIO.DIR_IN, GPIO.EDGE_BOTH);
+    }
   }
 
   setupEvents(): void {
@@ -176,6 +169,24 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     // obstruction
     this.garageDoorService.getCharacteristic(this.api.hap.Characteristic.ObstructionDetected)
       .onGet(this.getObstructionDetected.bind(this));
+  }
+
+  gpioInputStateChange(channel: number, pinHighState: boolean): void {
+    if (channel !== this.config.gpioPinState) {
+      return;
+    }
+
+    this.log.debug('Garage door state changed via GPIO input:', pinHighState ? 'HIGH' : 'LOW');
+
+    if (this.config.gpioStateInputReverse) {
+      pinHighState = !pinHighState;
+    }
+
+    this.externalStateChange(
+      pinHighState ?
+        this.api.hap.Characteristic.CurrentDoorState.OPEN :
+        this.api.hap.Characteristic.CurrentDoorState.CLOSED,
+    );
   }
 
   protected getCurrentDoorState() {
@@ -245,6 +256,22 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   private setGpio(pin: number, state: boolean): void {
     this.log.debug('Setting GPIO pin ' + pin + ' to ' + (state ? 'HIGH' : 'LOW'));
     GPIO.write(pin, state);
+  }
+
+  private externalStateChange(hkDoorState: number): void {
+    // update current and target door state
+    this.currentDoorState = hkDoorState;
+    this.targetDoorState = hkDoorState;
+
+    this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
+    this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
+
+    this.persistCache();
+
+    // cancel timeout
+    if (this.garageDoorMovingTimeout) {
+      clearTimeout(this.garageDoorMovingTimeout);
+    }
   }
 
   private persistCache(): void {

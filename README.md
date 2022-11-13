@@ -28,6 +28,9 @@ This plugin uses the GPIO output of the Raspberry PI to provide a HomeKit garage
 | executionTime           | integer | How many seconds does the garage door to execute an open or close command?                                                                     |
 | allowCommandOverride    | boolean | If true, the plugin will allow to send a new command (e.g. open) to the garage door while it's already executing another command (e.g. close). |
 | reverseOutput           | boolean | If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.                                        |
+| gpioStateInputEnabled   | boolean | If enabled, the plugin will read the current state of the garage door from the GPIO input.                                                     |
+| gpioPinState            | integer | The GPIO pin the plugin should use to read the current state of the garage door.                                                               |
+| gpioStateInputReverse   | boolean | If enabled, a GPIO HIGH state will indicate a CLOSED garage door.                                                                              |
 | webhookEnabled          | boolean | If enabled, the plugin will listen on the configured port for a webhook to changes of the garage door state, emitted by an external sensor.    |
 | webhookPort             | integer | The port the plugin should listen on for a webhook.                                                                                            |
 | webhookPath             | string  | The path the plugin should listen on for a webhook.                                                                                            |
