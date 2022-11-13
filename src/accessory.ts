@@ -6,6 +6,8 @@ import {
 import storage from 'node-persist';
 import GPIO from 'rpi-gpio';
 import {AccessoryConfig} from 'homebridge/lib/bridgeService';
+import * as http from 'node:http';
+import * as jp from 'jsonpath-plus';
 
 /**
  * HomebridgePlatform
@@ -15,6 +17,8 @@ import {AccessoryConfig} from 'homebridge/lib/bridgeService';
 export class GpioGarageDoorAccessory implements AccessoryPlugin {
   private storage;
 
+  private webhookServer: http.Server | null = null;
+
   private informationService;
   private garageDoorService;
 
@@ -23,6 +27,8 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   private currentDoorState = this.api.hap.Characteristic.CurrentDoorState.CLOSED;
   private targetDoorState = this.api.hap.Characteristic.TargetDoorState.CLOSED;
   private obstructionDetected = false;
+
+  private garageDoorMovingTimeout: any = null;
 
   private pinHigh = true;
 
@@ -71,6 +77,71 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
         this.setTargetDoorState(this.targetDoorState);
       }
     });
+
+    // setup webhook server
+    if (this.config.webhookEnabled) {
+      this.webhookServer = http.createServer((request, response) => {
+        let statusCode = 0;
+
+        try {
+          if (request.url === this.config.webhookPath) {
+            this.log.debug('Received webhook request');
+
+            if (request.method !== 'POST') {
+              statusCode = 405;
+              throw new Error('Invalid request method');
+            }
+
+            if (request.headers['content-type'] !== 'application/json') {
+              statusCode = 415;
+              throw new Error('Invalid content type');
+            }
+
+            let body = '';
+            request.on('data', (chunk) => {
+              body += chunk;
+            });
+            request.on('end', () => {
+              const json = JSON.parse(body);
+              this.log.debug('Received webhook request body:', json);
+
+              const currentDoorState = jp.JSONPath({path: this.config.webhookTargetDoorStatePath, json});
+              if (currentDoorState === undefined) {
+                throw new Error('Invalid door state');
+              }
+
+              const doorOpen = this.config.webhookJsonValueReverse ? !currentDoorState : !!currentDoorState;
+              const hkDoorState = doorOpen ? this.api.hap.Characteristic.CurrentDoorState.OPEN : this.api.hap.Characteristic.CurrentDoorState.CLOSED;
+
+              // update current and target door state
+              this.currentDoorState = hkDoorState;
+              this.targetDoorState = hkDoorState;
+
+              this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
+              this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
+
+              this.persistCache();
+
+              // cancel timeout
+              if (this.garageDoorMovingTimeout) {
+                clearTimeout(this.garageDoorMovingTimeout);
+              }
+            });
+
+            statusCode = 200;
+          } else {
+            statusCode = 404;
+            throw new Error('Invalid webhook path');
+          }
+        } catch (e: any) {
+          this.log.debug('Error handling webhook request:', e);
+        }
+
+        response.writeHead(statusCode || 500);
+        response.end();
+      });
+      this.webhookServer.listen(this.config.webhookPort);
+    }
   }
 
   getServices() {
@@ -153,7 +224,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
         this.setGpio(targetGpioPin, !this.pinHigh);
       }, this.config.emitTime);
 
-      setTimeout(() => {
+      this.garageDoorMovingTimeout = setTimeout(() => {
         this.currentDoorState = this.targetDoorState;
         this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.CurrentDoorState, this.currentDoorState);
 

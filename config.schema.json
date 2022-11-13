@@ -50,6 +50,48 @@
         "description": "If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.",
         "type": "boolean",
         "default": false
+      },
+      "webhookEnabled": {
+        "title": "Enable webhook",
+        "description": "If enabled, the plugin will expose a webhook to open or close the garage door.",
+        "type": "boolean",
+        "default": false
+      },
+      "webhookPort": {
+        "title": "Webhook port",
+        "description": "The port the webhook should listen on.",
+        "type": "integer",
+        "default": 8352,
+        "condition": {
+          "functionBody": "return model.webhookEnabled === true;"
+        }
+      },
+      "webhookPath": {
+        "title": "Webhook path",
+        "description": "The path the webhook should listen on.",
+        "type": "string",
+        "default": "/garage-door",
+        "condition": {
+          "functionBody": "return model.webhookEnabled === true;"
+        }
+      },
+      "webhookJsonPath": {
+        "title": "Webhook JSON path",
+        "description": "The JSON path to the value of the garage door state. A truthy value indicates an open garage door.",
+        "type": "string",
+        "default": "$.value",
+        "condition": {
+          "functionBody": "return model.webhookEnabled === true;"
+        }
+      },
+      "webhookJsonValueReverse": {
+        "title": "Reverse JSON value",
+        "description": "If enabled, the plugin will reverse the value of the JSON path. E.g. a truthy value will become falsy.",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.webhookEnabled === true;"
+        }
       }
     }
   }

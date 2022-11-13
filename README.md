@@ -19,15 +19,20 @@ This plugin uses the GPIO output of the Raspberry PI to provide a HomeKit garage
 
 ## Configuration
 
-| key                  | type    | description                                                                                                                                    |
-|----------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                 | string  | The name of the accessory.                                                                                                                     | 
-| gpioPinOpen          | integer | The GPIO pin the plugin should use to open the garage door.                                                                                    | 
-| gpioPinClose         | integer | The GPIO pin the plugin should use to close the garage door. If empty, gpioPinOpen is used to open and close the garage door.                  | 
-| emitTime             | integer | How many milliseconds should the GPIO output be HIGH?                                                                                          | 
-| executionTime        | integer | How many seconds does the garage door to execute an open or close command?                                                                     |
-| allowCommandOverride | boolean | If true, the plugin will allow to send a new command (e.g. open) to the garage door while it's already executing another command (e.g. close). |
-| reverseOutput        | boolean | If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.                                        |
+| key                     | type    | description                                                                                                                                    |
+|-------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string  | The name of the accessory.                                                                                                                     | 
+| gpioPinOpen             | integer | The GPIO pin the plugin should use to open the garage door.                                                                                    | 
+| gpioPinClose            | integer | The GPIO pin the plugin should use to close the garage door. If empty, gpioPinOpen is used to open and close the garage door.                  | 
+| emitTime                | integer | How many milliseconds should the GPIO output be HIGH?                                                                                          | 
+| executionTime           | integer | How many seconds does the garage door to execute an open or close command?                                                                     |
+| allowCommandOverride    | boolean | If true, the plugin will allow to send a new command (e.g. open) to the garage door while it's already executing another command (e.g. close). |
+| reverseOutput           | boolean | If enabled, a open signal will be sent as HIGH-LOW-HIGH, instead of the default behaviour LOW-HIGH-LOW.                                        |
+| webhookEnabled          | boolean | If enabled, the plugin will listen on the configured port for a webhook to changes of the garage door state, emitted by an external sensor.    |
+| webhookPort             | integer | The port the plugin should listen on for a webhook.                                                                                            |
+| webhookPath             | string  | The path the plugin should listen on for a webhook.                                                                                            |
+| webhookJsonPath         | string  | The JSON path to the value of the garage door state. A truthy value indicates an open garage door.                                             |
+| webhookJsonValueReverse | boolean | If enabled, the plugin will reverse the value of the JSON path. E.g. a truthy value will become falsy.                                         |
 
 ## Support & Contribution
 
