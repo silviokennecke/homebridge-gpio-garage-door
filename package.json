@@ -1,7 +1,7 @@
 {
   "name": "@silviokennecke/homebridge-gpio-garage-door",
   "displayName": "Homebridge GPIO garage door",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "Use GPIO output as HomeKit garage door",
   "license": "Apache-2.0",
   "author": {
