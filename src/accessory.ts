@@ -28,7 +28,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
   private targetDoorState = this.api.hap.Characteristic.TargetDoorState.CLOSED;
   private obstructionDetected = false;
 
-  private garageDoorMovingTimeout: any = null;
+  private garageDoorMovingTimeout?: NodeJS.Timeout;
 
   private pinHigh = true;
 
@@ -111,7 +111,9 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
               }
 
               const doorOpen = this.config.webhookJsonValueReverse ? !currentDoorState : !!currentDoorState;
-              const hkDoorState = doorOpen ? this.api.hap.Characteristic.CurrentDoorState.OPEN : this.api.hap.Characteristic.CurrentDoorState.CLOSED;
+              const hkDoorState = doorOpen ?
+                this.api.hap.Characteristic.CurrentDoorState.OPEN :
+                this.api.hap.Characteristic.CurrentDoorState.CLOSED;
 
               this.externalStateChange(hkDoorState);
             });
@@ -121,7 +123,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
             statusCode = 404;
             throw new Error('Invalid webhook path');
           }
-        } catch (e: any) {
+        } catch (e) {
           this.log.debug('Error handling webhook request:', e);
         }
 
@@ -271,6 +273,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     // cancel timeout
     if (this.garageDoorMovingTimeout) {
       clearTimeout(this.garageDoorMovingTimeout);
+      this.garageDoorMovingTimeout = undefined;
     }
   }
 
