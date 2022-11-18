@@ -155,6 +155,8 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
     if (this.config.gpioStateInputEnabled) {
       GPIO.on('change', this.gpioInputStateChange.bind(this));
       await GPIO.promise.setup(this.config.gpioPinState, GPIO.DIR_IN, GPIO.EDGE_BOTH);
+
+      this.gpioInputStateChange(this.config.gpioPinState, await GPIO.promise.read(this.config.gpioPinState));
     }
   }
 
