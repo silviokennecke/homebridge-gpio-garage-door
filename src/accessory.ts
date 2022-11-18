@@ -105,7 +105,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
               const json = JSON.parse(body);
               this.log.debug('Received webhook request body:', json);
 
-              const currentDoorState = jp.JSONPath({path: this.config.webhookTargetDoorStatePath, json});
+              const [currentDoorState] = jp.JSONPath({path: this.config.webhookJsonPath, json});
               if (currentDoorState === undefined) {
                 throw new Error('Invalid door state');
               }
