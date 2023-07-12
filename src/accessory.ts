@@ -209,6 +209,11 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
       this.garageDoorService.updateCharacteristic(this.api.hap.Characteristic.TargetDoorState, this.targetDoorState);
       return;
     }
+    
+    if (this.config.gpioStateInputEnabled && this.currentDoorState == this.targetDoorState) {
+      this.log.info('Command ignored, door is already at desired state');
+      return;
+    }
 
     this.log.debug('setTargetDoorState:', targetState);
     this.targetDoorState = targetState;
