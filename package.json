@@ -15,10 +15,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/silviokennecke/homebridge-gpio-garage-door.git"
+    "url": "git://github.com/nklint/homebridge-gpio-garage-door.git"
   },
   "bugs": {
-    "url": "https://github.com/silviokennecke/homebridge-gpio-garage-door/issues"
+    "url": "https://github.com/nklint/homebridge-gpio-garage-door/issues"
   },
   "engines": {
     "node": ">=14.18.1",
