@@ -1,5 +1,5 @@
 {
-  "name": "nklint/homebridge-gpio-garage-door",
+  "name": "@nklint/homebridge-gpio-garage-door",
   "displayName": "Homebridge GPIO garage door(fork)",
   "version": "1.0.1",
   "description": "Use GPIO output as HomeKit garage door",
