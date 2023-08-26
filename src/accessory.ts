@@ -210,7 +210,7 @@ export class GpioGarageDoorAccessory implements AccessoryPlugin {
       return;
     }
 
-    if (this.config.gpioStateInputEnabled && this.currentDoorState === this.targetDoorState) {
+    if (this.config.gpioStateInputEnabled && this.currentDoorState === targetState) {
       this.log.info('Command ignored, door is already at desired state');
       return;
     }
