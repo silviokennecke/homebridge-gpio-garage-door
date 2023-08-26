@@ -1,24 +1,18 @@
 {
-  "name": "@silviokennecke/homebridge-gpio-garage-door",
-  "displayName": "Homebridge GPIO garage door",
-  "version": "1.0.0",
+  "name": "@nklint/homebridge-gpio-garage-door",
+  "displayName": "Homebridge GPIO garage door(fork)",
+  "version": "1.0.3",
   "description": "Use GPIO output as HomeKit garage door",
   "license": "Apache-2.0",
   "author": {
-    "name": "Silvio Kennecke"
+    "name": "Gustaf Nilklint"
   },
-  "funding": [
-    {
-      "type": "paypal",
-      "url": "https://paypal.me/diginize"
-    }
-  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/silviokennecke/homebridge-gpio-garage-door.git"
+    "url": "git://github.com/nklint/homebridge-gpio-garage-door.git"
   },
   "bugs": {
-    "url": "https://github.com/silviokennecke/homebridge-gpio-garage-door/issues"
+    "url": "https://github.com/nklint/homebridge-gpio-garage-door/issues"
   },
   "engines": {
     "node": ">=14.18.1",
@@ -49,9 +43,9 @@
     "@types/rpi-gpio": "^2.1.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "nodemon": "^3.0.1",
     "eslint": "^8.0.1",
     "homebridge": "^1.3.5",
-    "nodemon": "^2.0.13",
     "rimraf": "^3.0.2",
     "ts-node": "^10.3.0",
     "typescript": "^4.4.4"
